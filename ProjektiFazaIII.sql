@@ -1,5 +1,5 @@
-﻿create database ProjektiFazaIIIDemo5
-use ProjektiFazaIIIDemo5
+﻿create database ProjektiFazaIIIDemo6
+use ProjektiFazaIIIDemo6
 
 create table Anime
 (
@@ -347,7 +347,7 @@ insert into Anime(EmriAnimese, Zhanri, DataLansimit, DataMbarimit, Buxheti, Fk_O
 insert into Anime(EmriAnimese, Zhanri, DataLansimit, DataMbarimit, Buxheti, Fk_Orari_ID, Fk_EStudios) values('Dragon Ball Super', 'Action', '09.22.1986', '03.06.1995', '2250000', '14', 'Studio8');
 insert into Anime(EmriAnimese, Zhanri, DataLansimit, DataMbarimit, Buxheti, Fk_Orari_ID, Fk_EStudios) values('Dragon Ball Z', 'Action', '01.26.1986', '06.11.2001', '2250000', '20', 'Studio14');
 insert into Anime(EmriAnimese, Zhanri, DataLansimit, DataMbarimit, Buxheti, Fk_Orari_ID, Fk_EStudios) values('Dragon Ball Z Kai', 'Action', '03.13.1999', '01.11.2005', '2250000', '23', 'Studio11');
-insert into Anime(EmriAnimese, Zhanri, DataLansimit, DataMbarimit, Buxheti, Fk_Orari_ID, Fk_EStudios) values('Ghost Hunt', 'Horror', '09.10.2004', '02.12.2011', '190000', '25', 'Studio15');
+insert into Anime(EmriAnimese, Zhanri, DataLansimit, DataMbarimit, Buxheti, Fk_Orari_ID, Fk_EStudios) values('Ghost Hunt', 'Horror', '09.10.2004', '02.12.2011', '190000', '25', 'Studio20');
 insert into Anime(EmriAnimese, Zhanri, DataLansimit, DataMbarimit, Buxheti, Fk_Orari_ID, Fk_EStudios) values('Naruto', 'Action', '03.01.2014', '01.12.2019', '2530000', '10', 'Studio8');
 insert into Anime(EmriAnimese, Zhanri, DataLansimit, DataMbarimit, Buxheti, Fk_Orari_ID, Fk_EStudios) values('Gintama', 'Comedy', '09.11.2009', '09.05.2015', '1450000', '9', 'Studio6');
 insert into Anime(EmriAnimese, Zhanri, DataLansimit, DataMbarimit, Buxheti, Fk_Orari_ID, Fk_EStudios) values('Space Dandy', 'Comedy', '09.11.2014', null, '670000', '6', 'Studio10');
@@ -356,11 +356,11 @@ insert into Anime(EmriAnimese, Zhanri, DataLansimit, DataMbarimit, Buxheti, Fk_O
 insert into Anime(EmriAnimese, Zhanri, DataLansimit, DataMbarimit, Buxheti, Fk_Orari_ID, Fk_EStudios) values('Blood: The Last Vampire', 'Horror', '09.12.2000', null, '117000', '5', 'Studio13');
 insert into Anime(EmriAnimese, Zhanri, DataLansimit, DataMbarimit, Buxheti, Fk_Orari_ID, Fk_EStudios) values('Monster', 'Horror', '08.04.1911', '05.01.2021', '222010', '2', 'Studio3');
 insert into Anime(EmriAnimese, Zhanri, DataLansimit, DataMbarimit, Buxheti, Fk_Orari_ID, Fk_EStudios) values('Monster1', 'Horror', '08.05.1972', '01.05.2021', '112310', '1', 'Studio1');
-insert into Anime(EmriAnimese, Zhanri, DataLansimit, DataMbarimit, Buxheti, Fk_Orari_ID, Fk_EStudios) values('Detective Conan: The Scarlet Bullet', 'Mystery', '09.25.2012', '01.05.2022', '3112310', '1', 'Studio15');
+insert into Anime(EmriAnimese, Zhanri, DataLansimit, DataMbarimit, Buxheti, Fk_Orari_ID, Fk_EStudios) values('Detective Conan: The Scarlet Bullet', 'Mystery', '09.25.2012', '01.05.2022', '3112310', '1', 'Studio20');
 insert into Anime(EmriAnimese, Zhanri, DataLansimit, DataMbarimit, Buxheti, Fk_Orari_ID, Fk_EStudios) values('Summer Ghost', 'Fantasy', '11.15.2012', '11.02.2031', '3112310', '10', 'Studio1');
 insert into Anime(EmriAnimese, Zhanri, DataLansimit, DataMbarimit, Buxheti, Fk_Orari_ID, Fk_EStudios) values('B The Beginning', 'Action', '12.15.2019', '11.02.2033', '4312310', '10', 'Studio2');
 
-
+select * from Anime
 
 ---------------
 insert into Manga(ISBN, Zhanri, Buxheti, DataLansimit, DataMbarimit, NriFaqeve, NumriK, Titulli, FK_EmriAnimese) values('971-3-22-148411-1', 'Action', '5288000', '01/02/2019', '04/04/2025', 150, 'I', 'Kapitulli', 'Demon Slayer');
@@ -1139,7 +1139,7 @@ where sa.Nr_Paisjeve <
 select a.EmriAnimese, a.Zhanri, a.DataMbarimit, a.Buxheti
 from Anime a 
 where DATEDIFF(DAY,a.DataMbarimit,GETDATE()) < 0 and a.EmriAnimese IN
-																	select p.EmriAnimese
+																	(select p.EmriAnimese
 																	from Personazhi p left join Anime a
 																	on p.EmriAnimese = a.EmriAnimese )
 																	order by DATEDIFF(DAY,a.DataMbarimit,GETDATE()) asc

@@ -1,5 +1,5 @@
-﻿create database ProjektiFazaIIIDemo6
-use ProjektiFazaIIIDemo6
+﻿create database FazaIIIProjekti
+use FazaIIIProjekti
 
 create table Anime
 (
@@ -360,8 +360,6 @@ insert into Anime(EmriAnimese, Zhanri, DataLansimit, DataMbarimit, Buxheti, Fk_O
 insert into Anime(EmriAnimese, Zhanri, DataLansimit, DataMbarimit, Buxheti, Fk_Orari_ID, Fk_EStudios) values('Summer Ghost', 'Fantasy', '11.15.2012', '11.02.2031', '3112310', '10', 'Studio1');
 insert into Anime(EmriAnimese, Zhanri, DataLansimit, DataMbarimit, Buxheti, Fk_Orari_ID, Fk_EStudios) values('B The Beginning', 'Action', '12.15.2019', '11.02.2033', '4312310', '10', 'Studio2');
 
-select * from Anime
-
 ---------------
 insert into Manga(ISBN, Zhanri, Buxheti, DataLansimit, DataMbarimit, NriFaqeve, NumriK, Titulli, FK_EmriAnimese) values('971-3-22-148411-1', 'Action', '5288000', '01/02/2019', '04/04/2025', 150, 'I', 'Kapitulli', 'Demon Slayer');
 insert into Manga(ISBN, Zhanri, Buxheti, DataLansimit, DataMbarimit, NriFaqeve, NumriK, Titulli, FK_EmriAnimese)  values('692-0-15-118242-7', 'Action', '122880', '02/05/2012', '10/06/2022', 230, 'II', 'Kapitulli', 'Attack on Titan');
@@ -579,6 +577,8 @@ insert into Aktori(Emri, Mbiemri, Pervoja_Punes, Paga) values('Christopher', 'Sa
 insert into Aktori(Emri, Mbiemri, Pervoja_Punes, Paga) values('Mamoru', 'Miyano', 'Bleach', '870.00');
 insert into Aktori(Emri, Mbiemri, Pervoja_Punes, Paga) values('Monica', 'Rial', 'Code Geass, Monster', '1300.50');
 
+
+
 insert into Bashkepunojne(Nr_ID, Nr_ID_Aktori) values('1', '22');
 insert into Bashkepunojne(Nr_ID, Nr_ID_Aktori) values('1', '24');
 insert into Bashkepunojne(Nr_ID, Nr_ID_Aktori) values('1', '25');
@@ -649,7 +649,6 @@ insert into PerformancaLive(EmriAnimese, Emri_Stream, Nr_ID_Aktori, Nr_ID) value
 insert into PerformancaLive(EmriAnimese, Emri_Stream, Nr_ID_Aktori, Nr_ID) values(' Ouran High School Host Club', 'Stream21', '15', '9');
 insert into PerformancaLive(EmriAnimese, Emri_Stream, Nr_ID_Aktori, Nr_ID) values('Blood: The Last Vampire', 'Stream22', '11', '8');
 insert into PerformancaLive(EmriAnimese, Emri_Stream, Nr_ID_Aktori, Nr_ID) values('Blood: The Last Vampire', 'Stream23', '12', '5');
-
 
 insert into Audienca(Emri, Mbiemri) values('Tanvir', 'Farley');
 insert into Audienca(Emri, Mbiemri) values('Eugene', 'Morrow');
@@ -855,6 +854,7 @@ insert into Personazhi(EmriAnimese, ISBN, Gjinia, EmriP, Mbiemri, Roli, Nr_Id_Ak
 insert into Personazhi(EmriAnimese, ISBN, Gjinia, EmriP, Mbiemri, Roli, Nr_Id_Aktori) values('Death Note', '219-9-16-998651-0', 'F', 'Saya', 'Otonashi', 'Protagonist', '21');
 insert into Personazhi(EmriAnimese, ISBN, Gjinia, EmriP, Mbiemri, Roli, Nr_Id_Aktori) values('B The Beginning', '113-6-63-041415-0', 'F', 'Izanami', null, 'Protagonist', '25');
 
+
 -------------===============Përditësimi i 20 objekteve duke përdorur kushtet të caktuara=================-------------------
 
 --1. Nderrimi i titullit te Manga-se
@@ -966,8 +966,8 @@ where Nr_ID = '1'
 -----------============Fshirja e 10 objekteve=======------------------
 
 --1. Fshirja e Mangase me emrin e animese se caktuar
-delete from Manga
-where FK_EmriAnimese like 'Monster' 
+delete from Cmimi
+where NrIVleresimeve = '10020'
 
 --2. Fshirja e Stream-it te caktuar
 delete from StreamingPlatform
@@ -1006,19 +1006,8 @@ delete from Personazhi
 where EmriP like 'S%' and Gjinia like 'F'
 
 
---------------------------------------------------------------------------------
-select * 
 
-from Personazhi p inner join Anime a
-on p.EmriAnimese = a.EmriAnimese
-
-select a.EmriAnimese, a.Zhanri 
-from Anime a right join StudioAnimimi st
-on st.Emri_Studios = a.Fk_EStudios
-where a.EmriAnimese is not null
-
-
---------------------Faza e III-----------------------
+---------===============Faza e III==================------------
 --▪ Të krijoni min. 8 query të thjeshta (4 për student), të realizohen vetëm me një relacion (tabelë)
 
 ---Arlind Aliu-----
@@ -1096,7 +1085,7 @@ on a.Audienca_ID = l.Audienca_ID_Lexuesi
 where not a.Audienca_ID in('10', '20', '30') and l.Vleresimi >=5
 order by l.Vleresimi asc
 
---Të krijoni min. 8 subquery të thjeshta (4 për student).
+-- Të krijoni min. 8 subquery të thjeshta (4 për student).
 
 ---Arlind Aliu---
 
@@ -1130,7 +1119,16 @@ Select *
 from StudioAnimimi sa
 where sa.Nr_Paisjeve <
 						(select max(sa.Nr_Punterove)
-						from StudioAnimimi sa) 
+						from StudioAnimimi sa)
+						
+--5. 'OPSIONALE' Te gjendet PagaMesatare e Autoreve dhe te shfaqen Aktoret te cilet e kane pagen me te madhe se paga mesatare e te gjithe Autoreve.
+WITH AutoriAktoriPaga(PagaMesatare) AS
+		(select avg(Paga) as 'AvgP'
+		from Autori )
+		select ak.Emri, ak.Mbiemri, ak.Nr_Id_Aktori, ak.Paga, ak.Pervoja_Punes
+		from Aktori ak, AutoriAktoriPaga a
+		where ak.Paga > a.PagaMesatare
+
 --▪ Të krijoni min. 8 subquery të avancuara (4 për student). (min. 1 subquery në klauzolën SELECT, dhe min. 1 subquery ne klauzolën FROM)
 
 ---Arlind Aliu---
@@ -1147,7 +1145,7 @@ where DATEDIFF(DAY,a.DataMbarimit,GETDATE()) < 0 and a.EmriAnimese IN
 
 --2. Te paraqiten Shtepite Botuese te cilat kane publikuar anime, te paraqiten vetem ato shtepi botuese qe kan publikuar me shume se 1 anime (Perdorimi i subquery ne klauzolen SELECT)
 select b.Emri_ShtepiseB, count(b.Emri_ShtepiseB) as 'AnimeteEBotuara'
-from Boton b
+from Boton b where b.Emri_ShtepiseB = 'ShtepiaBotuese 10'
 group by b.Emri_ShtepiseB
 having count(b.Emri_ShtepiseB) >ANY
 									(select count(b.Emri_ShtepiseB)
@@ -1167,8 +1165,19 @@ and a.EmriAnimese =ANY
 										where a.Zhanri like 'Action')
 										order by a.Buxheti asc
 
---4. Te gjenden ato Studio te cilat kane publikuar Anime me shume se sa Studio e cila ka publikuar me se paku Anime (Perdorimi i view)
- CREATE VIEW StudiotQeKanePublikuarAnime as
+
+--4. Te numerohen se sa Manga kane publikuar autoret dhe ata qe kane publikuar me shume se 1 Manga te gjendet paga mesatare e tyre(Perdorimi i WITH)
+WITH AAAM AS
+(select a.Emri, a.Mbiemri, count(aam.ISBN) as 'NrManga-ve'
+from Autori a inner join AutoriAnimeManga aam
+on a.Nr_Id = aam.Nr_ID
+	group by a.Emri, a.Mbiemri)
+								select avg(a.Paga) as [PAGA MESATARE E AUTOREVE QE KANE ME SHUME SE NJE ANIME] 
+								from Autori a, AAAM aaam 
+								where aaam.[NrManga-ve] > 1
+
+--5. 'OPISONALE' Te gjenden ato Studio te cilat kane publikuar Anime me shume se sa Studio e cila ka publikuar me se paku Anime (Perdorimi i VIEW)
+ /* CREATE VIEW StudiotQeKanePublikuarAnime as
 							(select sa.Emri_Studios, count(a.EmriAnimese) as 'SASIA E ANIMEVE QE KANE KRIJUAR'
 							from StudioAnimimi sa left join Anime a
 							on sa.Emri_Studios = a.Fk_EStudios
@@ -1178,12 +1187,135 @@ and a.EmriAnimese =ANY
 															from StudioAnimimi sa inner join Anime a
 															on sa.Emri_Studios = a.Fk_EStudios
 															group by sa.Emri_Studios)
-															)
+															)  
 select *
 from StudiotQeKanePublikuarAnime sqpa
-order by [SASIA E ANIMEVE QE KANE KRIJUAR] desc
+order by [SASIA E ANIMEVE QE KANE KRIJUAR] desc */
+														
 
+-- Të krijoni min. 8 query/subquery (4 për student). Duke përdorur operacionet e algjebrës relacionale (Union, Prerja, diferenca, etj.)
 
----------------------------------------------------------------------------------------------------------
+--Arlind Aliu---
 
-				
+--1. Te gjenden vetem ato Anime te cilat kane marrur cmim.
+(select c.EmriAnimese from Cmimi c)
+intersect
+(select a.EmriAnimese from Anime a)
+
+--2. Te shfaqen ato Manga te cilet personazhet aktual nuk kane marre pjese, dhe zhanri i te cileve eshte Action
+(Select m.FK_EmriAnimese, m.ISBN from Manga m 
+where m.Zhanri like 'Action')					
+except
+(select p.EmriAnimese ,p.ISBN from Personazhi p)
+
+--3. Te gjendet Aktori dhe Autori te cilet kane pagesen me te larte
+(select a.Emri, a.Mbiemri, a.Paga 
+from Autori a
+where a.Paga =ANY (select max(a.Paga) from Autori a))
+union
+(select ak.Emri, ak.Mbiemri, ak.Paga 
+from Aktori ak
+where ak.Paga =ANY (select max(ak.Paga) from Aktori ak))
+
+--4. Te gjenden Manga-te qe kane Anime dhe anasjelltas, dhe te gjendet Anime apo Manga buxheti i se ciles eshte me i larti dhe data e mbarimit te se ciles eshte pas vitit 2021 
+CREATE VIEW AnimeManga as
+(
+(select a.EmriAnimese, a.Zhanri, a.DataMbarimit, a.Buxheti from Anime a
+where a.DataMbarimit > '12-31-2021')
+union
+(select m.FK_EmriAnimese, m.Zhanri, m.DataMbarimit, m.Buxheti from Manga m
+where m.DataMbarimit > '12-31-2021'))
+
+select * from AnimeManga am 
+where am.Buxheti in
+					(select max(am.Buxheti) as 'Buxheti me i larte'
+					from AnimeManga am)
+
+-- Të krijoni min. 8 Proceduara të ruajtura (Stored Procedure) (4 për student)
+
+---Arlind Aliu---
+
+--1. Te krijohet procedura e cila dergon si parameter Zhanrin dhe shtyp Anime-te me zhaner te caktuar
+
+CREATE PROC Zhanri
+	@Zhanri varchar(255),
+	@numeroAnimete int = null,
+	@numeroZhanrin int = null
+	as 
+	begin
+	set @numeroAnimete  = (select count(*) from Anime); 
+	set @numeroZhanrin  = (select count(*) from Anime where @Zhanri = Zhanri ); 
+
+	print 'Gjithsej jane ' +cast((@numeroAnimete) as varchar(255)) + ' Anime, dhe ' + cast((@numeroZhanrin) as varchar(255)) + ' prej tyre jane me Zhanrin ' + @Zhanri + '!'
+
+	end
+	Zhanri 'Action'
+
+--2. Te shfaqen se sa botime kane bere Shtepite Botuese varesisht prej ciles Shtepise se deklaruar si parameter
+
+	CREATE PROCEDURE nrBotimeve
+	@EmriShtepise varchar(255)
+	as
+	begin 
+	declare @NrBotimeve int = (select count(b.Emri_ShtepiseB) as 'AnimeteEBotuara' from Boton b where b.Emri_ShtepiseB = @EmriShtepise)
+	
+	print 'Nr i botimeve per '+@EmriShtepise+' eshte '+ cast((@NrBotimeve) as varchar(255)) +'!'
+	end
+	
+	nrBotimeve 'ShtepiaBotuese 14' 
+
+--3. Te printohet se nese Autori me ID e pranuar si parameter ka publikuar nje apo me shume Anime
+
+	CREATE PROCEDURE nrPublikimeveTeAutorit
+	@ID int,
+	@EmriAutorit varchar(255) = null
+	as 
+	begin 
+		set @EmriAutorit = (select a.Emri from Autori a where a.Nr_Id = @ID)
+		declare @NrIPublikimeve int = (select count(aam.EmriAnimese) from AutoriAnimeManga aam where aam.Nr_ID = @ID)
+		
+		if(@NrIPublikimeve > 1)
+			begin
+				print 'Autori me emer: '+@EmriAutorit+', ka publikuar me shume se nje Anime!'
+			end
+		else
+			begin
+				print 'Autori me emer: '+@EmriAutorit+', ka publikuar vetem nje Anime!'
+			end
+		end
+	
+		nrPublikimeveTeAutorit '15'
+
+--4. Te behet krahasimi mes pages se Aktorit dhe Autorit varesisht prej ID se derguar ne parameter dhe te shfaqe per sa eshte me e madhe paga e njeri tjetrit!  
+
+CREATE PROC Paga
+@IDAktori int,
+@IDAutori int
+
+as 
+begin 
+	declare @PagaAktorit int = (select a.Paga from Aktori a where a.Nr_Id_Aktori = @IDAktori)
+	declare @PagaEAutorit int = (select a.Paga from Autori a where a.Nr_Id = @IDAutori)
+	declare @EmriAktorit varchar(255) = (select a.Emri from Aktori a where a.Nr_Id_Aktori = @IDAktori)
+	declare @EmriEAutorit varchar(255) = (select a.Emri from Autori a where a.Nr_Id = @IDAutori)
+	if(@PagaAktorit > @PagaEAutorit)
+		begin 
+			declare @sasiaParaveTeAktorit int = @PagaAktorit - @PagaEAutorit
+				print 'Paga e Aktorit '+@EmriAktorit+' eshte me e madhe se e Autorit '+@EmriEAutorit+' per '+cast((@sasiaParaveTeAktorit)as varchar(255))+ ' Euro!'
+		end
+	else if(@PagaAktorit < @PagaEAutorit)
+		begin
+			declare @sasiaParaveTeAutorit int = @PagaEAutorit - @PagaAktorit 
+				print 'Paga e Autorit '+@EmriEAutorit+' eshte me e madhe se e Aktorit'+@EmriAktorit+' per '+cast((@sasiaParaveTeAutorit)as varchar(255))+ ' Euro!'
+		end
+	else if(@PagaAktorit = @PagaEAutorit)
+		begin
+			print 'Paga e Aktorit dhe Autorit eshte e njejte'
+		end
+	else
+		begin
+			print 'ID e dhena jane gabim!'
+		end
+
+	end
+Paga '11', '12'
